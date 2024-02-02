@@ -1,5 +1,5 @@
 import opencc
-
+import utils.common_util as util
 from stroke_number import get_stroke_number
 
 stroke_goods = [1, 3, 5, 6, 7, 8, 11, 13, 15, 16, 17, 18, 21, 23, 24, 25, 29, 31, 32, 33, 35, 37, 39, 41, 45, 47, 48,
@@ -93,14 +93,14 @@ def get_wuxing(count):
 
 # 查看三才五格配置
 def check_wuge_config(name):
-    if len(name) != 3:
+    if len(name) <= 1:
         return
     # 姓名转繁体
     converter = opencc.OpenCC('s2t.json')
     complex_name = converter.convert(name)
     xing = get_stroke_number(complex_name[0])
     ming1 = get_stroke_number(complex_name[1])
-    ming2 = get_stroke_number(complex_name[2])
+    ming2 = get_stroke_number(util.get_idx(complex_name, 2, ''))  # get_stroke_number(complex_name[2])
     # 天格
     tian = xing + 1
     # 人格

@@ -1,3 +1,5 @@
+import opencc
+
 import config
 from config import name_source, last_name, dislike_words, \
     min_stroke_count, max_stroke_count, allow_general, name_validate, gender, \
@@ -6,6 +8,8 @@ from data_type import DataType
 from name_set import check_resource, get_source
 from wuge import check_wuge_config, get_stroke_list
 import utils.file_util as fu
+# 繁体转简体
+t2sConverter = opencc.OpenCC('t2s.json')
 
 
 def contain_bad_word(first_name):
@@ -45,7 +49,8 @@ def exec_config():
             print(">>输出完毕，请查看「names.txt」文件")
 
 
-def cover_config(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: bool = True, data_type: DataType = DataType.DEF):
+def cover_config(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: bool = True,
+                 data_type: DataType = DataType.DEF, dislike_arr: list[str] = None):
     """
     覆盖 config.py，不仅要覆盖文本，还要覆盖值，因为有直接引用和加载引用的！
     :param xing:
@@ -53,6 +58,7 @@ def cover_config(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: 
     :param min_stroke:
     :param mid_aus:
     :param data_type:
+    :param dislike_arr: 不喜欢的字
     :return:
     """
     config.last_name = xing
@@ -60,17 +66,20 @@ def cover_config(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: 
     config.min_stroke_count = min_stroke
     config.allow_general = mid_aus
     config.name_source = data_type.key
+    config.dislike_words = dislike_arr
     fu.cover_props('config.py', last_name=f'"{xing}"', max_stroke_count=max_stroke, min_stroke_count=min_stroke,
-                   allow_general=mid_aus, name_source=data_type.key)
+                   allow_general=mid_aus, name_source=data_type.key, dislike_words=dislike_arr)
 
 
-def exec_all(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: bool = True, data_type: DataType = DataType.DEF):
+def exec_all(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: bool = True,
+             data_type: DataType = DataType.DEF, dislike_arr: list[str] = None):
     """
     :param xing: 姓氏
     :param max_stroke: 最大笔画数
     :param min_stroke: 最小笔画数
     :param mid_aus: 中吉
     :param data_type: 0: "默认现成库", 1: "诗经", 2: "楚辞", 3: "论语", 4: "周易", 5: "唐诗", 6: "宋诗", 7: "宋词"
+    :param dislike_arr: 不喜欢的字
     :return:
     """
     names = list()
@@ -91,9 +100,10 @@ def exec_all(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: bool
         print(">>输出结果...")
         names.sort()
         for i in names:
-            f.write(xing + str(i) + "\n")
+            f.write(xing + t2sConverter.convert(str(i)) + "\n")
         print(">>输出完毕，请查看「names.txt」文件")
 
 
 if __name__ == '__main__':
-    exec_all('陶', data_type=DataType.SHI_JING)
+    # exec_all('陶', data_type=DataType.SHI_JING)
+    check_wuge_config('陶琦')

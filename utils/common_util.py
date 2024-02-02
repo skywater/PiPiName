@@ -165,17 +165,17 @@ def is_array(obj) -> bool:
     return isinstance(obj, Collection) and not is_dict(obj)
 
 
-def get_idx(array, idx: int):  # 注意，这里只是为了不报错！
-    size = get_len(array)
+def get_idx(arr, idx: int, def_val=None):  # 注意，这里只是为了不报错！
+    size = get_len(arr)
     if size == 0 or size <= idx:
-        return None
+        return def_val
     idx = idx if idx >= 0 else (idx + size)
-    if is_set(array):
-        for i, e in enumerate(array):
+    if is_set(arr):
+        for i, e in enumerate(arr):
             if i == idx:
                 return e
     else:
-        return array[idx] if is_array(array) else None
+        return arr[idx] if is_array(arr) else def_val
 
 
 def trim_all(pars: str):
