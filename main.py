@@ -6,13 +6,15 @@ from config import name_source, last_name, dislike_words, \
     check_name, check_name_resource
 from data_type import DataType
 from name_set import check_resource, get_source
-from wuge import check_wuge_config, get_stroke_list
+from wuge import check_wuge_config, get_stroke_list, get_stroke_type
 import utils.file_util as fu
 # 繁体转简体
 t2sConverter = opencc.OpenCC('t2s.json')
 
 
 def contain_bad_word(first_name):
+    if dislike_words is None:
+        return False
     for word in first_name:
         if word in dislike_words:
             return True
@@ -100,10 +102,17 @@ def exec_all(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: bool
         print(">>输出结果...")
         names.sort()
         for i in names:
-            f.write(xing + t2sConverter.convert(str(i)) + "\n")
+            full_name = xing + i.first_name
+            tian_arr, ren_arr, di_arr, zong_arr, wai_arr, sancai_arr = check_wuge_config(full_name, False)
+            line = f"{xing}{t2sConverter.convert(str(i))}\n"
+            line += f'[{tian_arr[0]}={tian_arr[1]} {tian_arr[2]}][{ren_arr[0]}={ren_arr[1]} {ren_arr[2]}]'
+            line += f'[{tian_arr[0]}={tian_arr[1]} {tian_arr[2]}][{ren_arr[0]}={ren_arr[1]} {ren_arr[2]}]'
+            line += f'[{di_arr[0]}={di_arr[1]} {di_arr[2]}][{zong_arr[0]}={zong_arr[1]} {zong_arr[2]}]'
+            line += f'[{wai_arr[0]}={wai_arr[1]} {wai_arr[2]}]\t{sancai_arr[0]}={sancai_arr[1]} {sancai_arr[2]}\n\n'
+            f.write(line)
         print(">>输出完毕，请查看「names.txt」文件")
 
 
 if __name__ == '__main__':
-    # exec_all('陶', data_type=DataType.SHI_JING)
-    check_wuge_config('陶琦')
+    exec_all('陶', data_type=DataType.ZHOU_YI)
+    # check_wuge_config('陶锦恒')

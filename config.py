@@ -1,12 +1,12 @@
 # 选择词库
 # 0: "默认", 1: "诗经", 2: "楚辞", 3: "论语",
 # 4: "周易", 5: "唐诗", 6: "宋诗", 7: "宋词"
-name_source = 1
+name_source = 4
 
 # 姓，仅支持单姓
 last_name = "陶"
 # 不想要的字，结果中不会出现这些字
-dislike_words = list("")
+dislike_words = None
 
 # 最小笔画数
 min_stroke_count = 6

@@ -92,7 +92,7 @@ def get_wuxing(count):
 
 
 # 查看三才五格配置
-def check_wuge_config(name):
+def check_wuge_config(name, is_log=True):
     if len(name) <= 1:
         return
     # 姓名转繁体
@@ -114,15 +114,22 @@ def check_wuge_config(name):
     # 三才配置
     sancai_config = get_sancai_config([tian, ren, di])
     # 输出结果
-    print("\n")
-    print(name + "\n")
-    print(complex_name + " " + str(xing) + " " + str(ming1) + " " + str(ming2) + "\n")
-    print("天格\t" + str(tian))
-    print("人格\t" + str(ren) + "\t" + get_stroke_type(ren))
-    print("地格\t" + str(di) + "\t" + get_stroke_type(di))
-    print("总格\t" + str(zong) + "\t" + get_stroke_type(zong))
-    print("外格\t" + str(wai) + "\t" + get_stroke_type(wai))
-    print("\n三才\t" + sancai_config + "\t" + get_sancai_type(sancai_config) + "\n")
+    if is_log:
+        print("\n")
+        print(name + "\n")
+        print(complex_name + " " + str(xing) + " " + str(ming1) + " " + str(ming2) + "\n")
+    tian_arr = map_stroke_type('天格', tian)
+    ren_arr, di_arr = map_stroke_type('人格', ren), map_stroke_type('地格', di)
+    zong_arr, wai_arr = map_stroke_type('总格', zong), map_stroke_type('外格', wai)
+    sancai_arr = ('三才', sancai_config, get_sancai_type(sancai_config))
+    if is_log:
+        print(f"{tian_arr[0]}\t{tian_arr[1]}\t{tian_arr[2]}")
+        print(f"{ren_arr[0]}\t{ren_arr[1]}\t{ren_arr[2]}")
+        print(f"{di_arr[0]}\t{di_arr[1]}\t{di_arr[2]}")
+        print(f"{zong_arr[0]}\t{zong_arr[1]}\t{zong_arr[2]}")
+        print(f"{wai_arr[0]}\t{wai_arr[1]}\t{wai_arr[2]}")
+        print(f"{sancai_arr[0]}\t{sancai_arr[1]}\t{sancai_arr[2]}")
+    return tian_arr, ren_arr, di_arr, zong_arr, wai_arr, sancai_arr
 
 
 # 获取三才配置
@@ -142,6 +149,17 @@ def get_stroke_type(stroke):
         return "凶"
     else:
         return ""
+
+
+def map_stroke_type(type_name, stroke):
+    if stroke in stroke_goods:
+        return type_name, stroke, "大吉"
+    elif stroke in stroke_generals:
+        return type_name, stroke, "中吉"
+    elif stroke in stroke_bads:
+        return type_name, stroke, "凶"
+    else:
+        return type_name, stroke, ""
 
 
 def get_sancai_type(config):
