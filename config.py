@@ -4,22 +4,21 @@
 name_source = 1
 
 # 姓，仅支持单姓
-last_name = "林"
-
+last_name = "陶"
 # 不想要的字，结果中不会出现这些字
 dislike_words = list("")
 
 # 最小笔画数
-min_stroke_count = 3
+min_stroke_count = 6
 
 # 最大笔画数
-max_stroke_count = 30
+max_stroke_count = 36
 
 # 允许使用中吉，开启后将生成包含中吉配置的名字，生成的名字会更多
-allow_general = False
+allow_general = True
 
 # 是否筛选名字，仅输出名字库中存在的名字，可以过滤明显不合适的名字
-name_validate = True
+name_validate = False
 
 # 是否筛选性别，男/女，空则不筛选，仅当开启名字筛选时有效
 gender = ""
