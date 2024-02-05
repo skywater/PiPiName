@@ -31,7 +31,8 @@ def exec_config():
     else:
         # 起名
         names = list()
-        with open("names.txt", "w+", encoding='utf-8') as f:
+        file_name = f"{last_name}_{name_source}.txt"
+        with open(file_name, "w+", encoding='utf-8') as f:
             for i in get_source(name_source, name_validate, get_stroke_list(last_name, allow_general)):
                 if i.stroke_number1 < min_stroke_count or i.stroke_number1 > max_stroke_count or \
                         i.stroke_number2 < min_stroke_count or i.stroke_number2 > max_stroke_count:
@@ -48,7 +49,7 @@ def exec_config():
             names.sort()
             for i in names:
                 f.write(last_name + str(i) + "\n")
-            print(">>输出完毕，请查看「names.txt」文件")
+            print(f">>输出完毕，请查看「{file_name}」文件")
 
 
 def cover_config(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: bool = True,
@@ -86,7 +87,8 @@ def exec_all(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: bool
     """
     names = list()
     cover_config(xing, max_stroke, min_stroke, mid_aus, data_type)
-    with open("names.txt", "w+", encoding='utf-8') as f:
+    file_name = f"{xing}_{data_type.display}.txt"
+    with open(file_name, "w+", encoding='utf-8') as f:
         for i in get_source(data_type.key, config.name_validate, get_stroke_list(xing, mid_aus)):
             if i.stroke_number1 < min_stroke or i.stroke_number1 > max_stroke or \
                     i.stroke_number2 < min_stroke or i.stroke_number2 > max_stroke:
@@ -110,9 +112,11 @@ def exec_all(xing: str, max_stroke: int = 36, min_stroke: int = 6, mid_aus: bool
             line += f'[{di_arr[0]}={di_arr[1]} {di_arr[2]}][{zong_arr[0]}={zong_arr[1]} {zong_arr[2]}]'
             line += f'[{wai_arr[0]}={wai_arr[1]} {wai_arr[2]}]\t{sancai_arr[0]}={sancai_arr[1]} {sancai_arr[2]}\n\n'
             f.write(line)
-        print(">>输出完毕，请查看「names.txt」文件")
+        print(f">>输出完毕，请查看「{file_name}」文件")
 
 
 if __name__ == '__main__':
-    exec_all('陶', data_type=DataType.ZHOU_YI)
-    # check_wuge_config('陶锦恒')
+    # exec_all('陶', data_type=DataType.SHI_JING)
+    check_wuge_config('陶锦恒')
+    check_wuge_config('陶弘景')
+    check_wuge_config('陶弘毅')
