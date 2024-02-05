@@ -13,3 +13,9 @@ class DataType(Enum):
     def __init__(self, key, display: str):
         self.key = key
         self.display = display
+
+    def __repr__(self):
+        return f"{self.name}:{self.key} {self.display}"
+
+    def __str__(self):
+        return self.__repr__()

@@ -39,7 +39,8 @@ def chdir_to_cur(file_path=__file__):
 
 def get_logger(filename: str = __file__, level=logging.DEBUG):
     root_name = 'src' if __name__ == '__main__' else __name__.split('.')[0]  # 找到项目根目录
-    filename = filename[filename.rfind(root_name):]  # 通过路径找到项目根目录
+    idx = filename.rfind(root_name)
+    filename = filename[max(0, idx):]  # 通过路径找到项目根目录
     arr = re.split(r'[\\/.]', filename)
     log_name = ".".join(arr[0:-1])
     logger = logging.getLogger(log_name)
@@ -57,9 +58,6 @@ def get_logger(filename: str = __file__, level=logging.DEBUG):
     global log
     log = logger
     return logger
-
-
-log = get_logger(__file__)
 
 
 def println(args: list):
@@ -521,6 +519,7 @@ def replace_idx(text: str, old, new, start_idx: int):
 
 
 if __name__ == '__main__':
+    log = get_logger(__file__)
     print(get_suffix("aaa"))
     print(list_file_paths("E:\\img\\human"))
     rgb = 11, 11, 11
